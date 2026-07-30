@@ -161,8 +161,38 @@ lib/
 
 ---
 
-## النشر
+## النشر على Vercel
 
-يعمل على Vercel بلا إعداد إضافي: اربط المستودع واضبط `CONTACT_WEBHOOK_URL` إن
-أردت تفعيل النموذج. لا يستخدم الموقع `next/image` ولا أي خدمة خارجية، فهو يعمل
-كذلك على أي مستضيف يدعم Node.js.
+المستودع جاهز للنشر كما هو. تم التحقق من أن `npm ci && npm run build` — وهو
+بالضبط ما تنفّذه Vercel — ينجح من تثبيت نظيف.
+
+### الخطوات
+
+1. ادخل [vercel.com/new](https://vercel.com/new) وسجّل الدخول بحساب GitHub.
+2. اختر مستودع `karshoum/Muaz` واضغط **Import**.
+3. لا تغيّر شيئًا في شاشة الإعداد — تكتشف Vercel تلقائيًا:
+   - Framework: **Next.js**
+   - Build Command: `npm run build`
+   - Output Directory: `.next`
+   - Install Command: `npm install`
+4. **Environment Variables** — اتركها فارغة إن كنت تريد سلوك نموذج التواصل
+   الافتراضي (فتح تطبيق البريد). لتفعيل الإرسال من الخادم أضف
+   `CONTACT_WEBHOOK_URL` بقيمة نقطة النهاية التي تستقبل الرسائل.
+5. اضغط **Deploy**. البناء يستغرق نحو دقيقة.
+
+### بعد أول نشر
+
+- **الفرع الإنتاجي:** المستودع فرعه الوحيد والافتراضي هو
+  `claude/maaz-portfolio-website-lblw8d`، فتنشره Vercel إنتاجًا مباشرةً بلا دمج.
+  إن أعدت تسمية الفرع الافتراضي لاحقًا إلى `main`، حدّث
+  *Settings → Git → Production Branch* ليطابقه.
+- **النطاق:** بعد ربط نطاقك في *Settings → Domains*، عدّل `profile.siteUrl` في
+  `lib/data.ts` ليطابقه — يُستخدم في الرابط الأساسي (canonical) وبطاقات
+  المشاركة، وتركه على القيمة الافتراضية يعطي روابط مشاركة خاطئة.
+- **السيرة الذاتية:** استبدل الملف النائب `public/cv-maaz-karshoum.pdf` قبل أن
+  يزور الموقع أحد.
+
+### مستضيفات أخرى
+
+لا يستخدم الموقع `next/image` ولا أي خدمة خارجية، فهو يعمل على أي مستضيف يدعم
+Node.js ‏20+ بـ `npm run build && npm run start`.
