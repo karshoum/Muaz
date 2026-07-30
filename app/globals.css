@@ -1,0 +1,193 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ————————————————————————————————————————————————————————————
+   متغيّرات الثيم — لا تُكتب قيم لونية خام داخل المكوّنات.
+   القيم بصيغة قنوات RGB لتعمل مع rgb(var(--x) / <alpha-value>).
+   ———————————————————————————————————————————————————————————— */
+@layer base {
+  :root {
+    --bg: 248 250 252;
+    --surface: 255 255 255;
+    --line: 226 232 240;
+    --ink: 15 23 42;
+    --muted: 71 85 105;
+    /* slate-500: يحقق ٤٫٨:١ على --bg. الأفتح منه يسقط تحت حدّ WCAG AA
+       في النصوص الصغيرة (تسميات «لمحة سريعة» وتلميحات التواصل). */
+    --faint: 100 116 139;
+    --accent: 79 70 229;
+    --accent-2: 8 145 178;
+    /* تدرّج الأسطح الممتلئة ذات النص الأبيض — ثابت في الوضعين.
+       لا يُشتقّ من --accent لأن الأخير يُفتَّح في الوضع الداكن ليُقرأ
+       فوق خلفية داكنة، فيهبط النص الأبيض فوقه إلى ١٫٨:١. هذان الطرفان
+       يضمنان ≥٥:١ للأبيض على امتداد التدرّج كله. */
+    --cta-from: 67 56 202;
+    --cta-to: 14 116 144;
+    --glass: 255 255 255;
+    --glass-alpha: 0.66;
+    --glass-border: 15 23 42;
+    --glass-border-alpha: 0.08;
+    color-scheme: light;
+  }
+
+  .dark {
+    --bg: 7 10 20;
+    --surface: 17 22 38;
+    --line: 41 48 70;
+    --ink: 241 245 249;
+    --muted: 168 178 196;
+    --faint: 122 133 155;
+    --accent: 129 140 248;
+    --accent-2: 34 211 238;
+    --glass: 255 255 255;
+    --glass-alpha: 0.045;
+    --glass-border: 255 255 255;
+    --glass-border-alpha: 0.1;
+    color-scheme: dark;
+  }
+
+  * {
+    @apply border-line;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    /* يمنع اختفاء العناوين خلف الشريط العلوي الثابت عند التنقّل السلس */
+    scroll-padding-top: 6rem;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-bg text-ink font-arabic antialiased;
+    /* يمنع أي تمرير أفقي مهما ضاقت الشاشة */
+    overflow-x: hidden;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* حلقة تركيز مرئية وواضحة في الوضعين */
+  :focus-visible {
+    @apply outline-none ring-2 ring-accent ring-offset-2;
+    --tw-ring-offset-color: rgb(var(--bg));
+  }
+
+  ::selection {
+    background-color: rgb(var(--accent) / 0.22);
+    color: rgb(var(--ink));
+  }
+
+  /* شريط تمرير هادئ يتبع الثيم */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: rgb(var(--bg));
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgb(var(--faint) / 0.45);
+    border-radius: 9999px;
+    border: 2px solid rgb(var(--bg));
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgb(var(--faint) / 0.7);
+  }
+}
+
+@layer components {
+  /* كل سطح ممتلئ يحمل نصًّا أو أيقونة بيضاء يستخدم هذا، لا تدرّج --accent */
+  .grad-cta {
+    background-image: linear-gradient(
+      to bottom left,
+      rgb(var(--cta-from)),
+      rgb(var(--cta-to))
+    );
+  }
+
+  .glass {
+    background-color: rgb(var(--glass) / var(--glass-alpha));
+    border: 1px solid rgb(var(--glass-border) / var(--glass-border-alpha));
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+  }
+
+  .container-page {
+    @apply mx-auto w-full max-w-6xl px-5 sm:px-6 lg:px-8;
+  }
+
+  .text-gradient {
+    background-image: linear-gradient(
+      to left,
+      rgb(var(--accent)),
+      rgb(var(--accent-2))
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /**
+   * لون هوية المشروع مضبوطًا ليحقق تباينًا مقروءًا في الوضعين:
+   * يُغمَّق فوق الخلفية الفاتحة ويُفتَّح فوق الداكنة.
+   * بدون هذا يسقط ذهبي برادايس/المسيرية (#C9A227) إلى ٢٫٢:١ على الأبيض.
+   */
+  .project-accent {
+    color: color-mix(in oklab, rgb(var(--p-to)) 68%, #0b1020);
+  }
+  .dark .project-accent {
+    /* ٧٢٪ لا ٨٢٪: بنفسجي أبوذر عند ٨٢٪ يعطي ٤٫٣٤:١ — تحت الحدّ بقليل */
+    color: color-mix(in oklab, rgb(var(--p-to)) 72%, #ffffff);
+  }
+
+  /* تُذوّب الهالات الضوئية قبل حافة القسم، فلا يظهر خط قصّ أفقي حادّ
+     عند التقاء الواجهة الرئيسية بقسم «عنّي» (overflow-hidden يقصّها). */
+  .hero-bg-fade {
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      #000 0%,
+      #000 62%,
+      transparent 96%
+    );
+    mask-image: linear-gradient(to bottom, #000 0%, #000 62%, transparent 96%);
+  }
+
+  /* شبكة خافتة لخلفية الواجهة الرئيسية */
+  .grid-bg {
+    background-image: linear-gradient(
+        to left,
+        rgb(var(--ink) / 0.045) 1px,
+        transparent 1px
+      ),
+      linear-gradient(to bottom, rgb(var(--ink) / 0.045) 1px, transparent 1px);
+    background-size: 56px 56px;
+    -webkit-mask-image: radial-gradient(
+      ellipse 70% 60% at 50% 35%,
+      #000 40%,
+      transparent 100%
+    );
+    mask-image: radial-gradient(
+      ellipse 70% 60% at 50% 35%,
+      #000 40%,
+      transparent 100%
+    );
+  }
+}
+
+/* ————————————————————————————————————————————————————————————
+   احترام تفضيل تقليل الحركة — يُبطل كل الحركات فعليًا،
+   بما فيها حركات Framer Motion المبنية على transform/opacity.
+   ———————————————————————————————————————————————————————————— */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
