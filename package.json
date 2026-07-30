@@ -1,0 +1,44 @@
+{
+  "name": "alraqi-furniture",
+  "version": "1.0.0",
+  "private": true,
+  "description": "معرض الراقي الهندسي للأثاث والديكور - متجر إلكتروني مع طلب مباشر عبر واتساب",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui"
+  },
+  "dependencies": {
+    "@imgly/background-removal": "^1.5.5",
+    "@supabase/supabase-js": "^2.45.4",
+    "clsx": "^2.1.1",
+    "idb": "^8.0.0",
+    "next": "14.2.33",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.47.2",
+    "@testing-library/jest-dom": "^6.5.0",
+    "@testing-library/react": "^16.0.1",
+    "@testing-library/user-event": "^14.5.2",
+    "@types/node": "^20.16.10",
+    "@types/react": "^18.3.11",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.2",
+    "autoprefixer": "^10.4.20",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "14.2.33",
+    "fake-indexeddb": "^6.0.0",
+    "jsdom": "^25.0.1",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^3.4.13",
+    "typescript": "^5.6.2",
+    "vitest": "^2.1.2"
+  }
+}

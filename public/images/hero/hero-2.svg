@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 700" width="1600" height="700" role="img" aria-label="بانر">
+  <defs>
+    <linearGradient id="hb2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#3E3A45"/>
+      <stop offset="100%" stop-color="#22202A"/>
+    </linearGradient>
+    <linearGradient id="hg2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#E0C173"/>
+      <stop offset="100%" stop-color="#C59B27"/>
+    </linearGradient>
+    <pattern id="hp2" width="60" height="60" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <path d="M0 30h60M30 0v60" stroke="#C59B27" stroke-opacity="0.1" stroke-width="2"/>
+    </pattern>
+  </defs>
+  <rect width="1600" height="700" fill="url(#hb2)"/>
+  <rect width="1600" height="700" fill="url(#hp2)"/>
+  <g opacity=".92">
+      <rect x="420" y="270" width="760" height="180" rx="26" fill="#8A8299"/>
+      <rect x="420" y="270" width="760" height="60" rx="20" fill="url(#hg2)" opacity=".3"/>
+      <rect x="470" y="450" width="660" height="110" rx="18" fill="#B4ADBE"/>
+      <circle cx="320" cy="250" r="40" fill="url(#hg2)" opacity=".65"/>
+      <rect x="302" y="290" width="36" height="180" rx="8" fill="#5C5666"/>
+      <rect x="1240" y="330" width="150" height="230" rx="16" fill="#6E6778"/>
+      <rect x="0" y="600" width="1600" height="100" fill="#1B1922"/>
+    </g>
+</svg>

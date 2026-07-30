@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600" role="img" aria-label="صورة توضيحية">
+  <defs>
+    <linearGradient id="bgdn" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#EBE6DC"/>
+      <stop offset="100%" stop-color="#C9BCA6"/>
+    </linearGradient>
+    <linearGradient id="golddn" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#E0C173"/>
+      <stop offset="100%" stop-color="#C59B27"/>
+    </linearGradient>
+    <pattern id="patdn" width="46" height="46" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="46" height="46" fill="none"/>
+      <path d="M0 23h46M23 0v46" stroke="#C59B27" stroke-opacity="0.12" stroke-width="1.5"/>
+    </pattern>
+  </defs>
+  <rect width="800" height="600" fill="url(#bgdn)"/>
+  <rect width="800" height="600" fill="url(#patdn)"/>
+  <g>
+      <ellipse cx="400" cy="290" rx="230" ry="56" fill="#FBF8F1" stroke="#C59B27" stroke-opacity=".5" stroke-width="3"/>
+      <rect x="386" y="300" width="28" height="150" rx="8" fill="#8C7752"/>
+      <rect x="320" y="450" width="160" height="18" rx="9" fill="#8C7752"/>
+      <g fill="#F4EFE6" stroke="#C9BCA6" stroke-width="3">
+        <rect x="180" y="230" width="70" height="90" rx="10"/>
+        <rect x="550" y="230" width="70" height="90" rx="10"/>
+        <rect x="180" y="330" width="70" height="120" rx="10"/>
+        <rect x="550" y="330" width="70" height="120" rx="10"/>
+      </g>
+      <circle cx="400" cy="270" r="26" fill="url(#golddn)" opacity=".55"/>
+    </g>
+  <rect x="14" y="14" width="772" height="572" rx="10" fill="none" stroke="#C59B27" stroke-opacity="0.35" stroke-width="2"/>
+</svg>
