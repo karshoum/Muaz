@@ -110,8 +110,9 @@ export const projectCategories: ProjectCategory[] = [
 export const projects: Project[] = [
   {
     id: 'abozer',
-    title: 'منصة مؤسسة د. أبوذر الكودة التعليمية',
-    tagline: 'نظام إداري تعليمي متعدد الأدوار',
+    // اسم الجهة والرابط أُزيلا حفاظًا على خصوصيتها — الوصف والميزات لا تسمّيها
+    title: 'منصة إدارية تعليمية متعددة الأدوار',
+    tagline: 'ERP تعليمي بثماني لوحات تحكم',
     description:
       'نظام إداري تعليمي متكامل متعدد الأدوار يخدم دورة العمل المدرسية كاملة، من تسجيل الطالب ومتابعة حضوره إلى الجداول والرسوم والتقارير الإدارية، بلوحة تحكم مستقلة لكل دور وظيفي.',
     category: 'education',
@@ -124,7 +125,6 @@ export const projects: Project[] = [
     stack: ['Firebase Hosting', 'Firestore', 'Role-Based Auth', 'JavaScript SPA'],
     accent: { from: '#2B2E83', to: '#4F46E5' },
     preview: 'abozer',
-    url: 'https://abozer-bd465.web.app/app',
   },
   {
     id: 'paradise',
@@ -142,11 +142,12 @@ export const projects: Project[] = [
     stack: ['Next.js', 'Tailwind CSS', 'REST APIs'],
     accent: { from: '#0F2A43', to: '#C9A227' },
     preview: 'paradise',
-    url: 'https://paradise11.vercel.app/services',
+    url: 'https://paradise11.vercel.app/services/ship_ticket',
   },
   {
     id: 'musayria',
-    title: 'منصة اتحاد المسيرية الزرق للنشر والوثائق التاريخية',
+    // اسم الجهة أُزيل حفاظًا على خصوصيتها
+    title: 'نظام إدارة محتوى تاريخي وأرشفة وثائق',
     tagline: 'بوابة تاريخية ونظام إدارة محتوى',
     description:
       'بوابة إلكترونية تاريخية ونظام إدارة محتوى لنشر المباحث والبحوث التاريخية ووثائق الإدارة الأهلية، بمسار تحريري يضمن أن ما يُنشر موثّق ومُراجَع لا مجرد رأي.',
@@ -186,12 +187,20 @@ export const projects: Project[] = [
 
 export const timeline: TimelineEntry[] = [
   {
+    id: 'abozer-school',
+    kind: 'work',
+    role: 'مدرّس متعاقد',
+    org: 'مدرسة أبوذر الكودة',
+    period: 'غير محدد',
+    current: true,
+    bullets: ['تدريس بصفة معلّم متعاقد في مدرسة أبوذر الكودة.'],
+  },
+  {
     id: 'kordofan',
     kind: 'work',
     role: 'أستاذ متعاون — قسم تقانة المعلومات',
     org: 'جامعة كردفان',
-    period: '٠٣/٢٠٢٤ — الآن',
-    current: true,
+    period: '٠٣/٢٠٢٤ — ٠٣/٢٠٢٦',
     bullets: [
       'تدريس وتدريب الطلاب عمليًا في معامل الحاسوب الجامعية.',
       'الإشراف على مشاريع التخرّج البرمجية وتطوير قدرات الطلاب التقنية والأكاديمية.',
@@ -213,10 +222,10 @@ export const timeline: TimelineEntry[] = [
     tags: ['Python', 'Google Colab', 'Generative AI', 'Prompt Engineering'],
   },
   {
-    id: 'cabinet',
+    id: 'states-council',
     kind: 'work',
     role: 'مدرّب وخبير تقني',
-    org: 'الأمانة العامة لمجلس الوزراء',
+    org: 'الأمانة العامة لمجلس الولايات',
     period: '١٠/٢٠١٨ — ١٢/٢٠٢١',
     bullets: [
       'المساهمة في تصميم وتطوير نظام إدارة المحتوى الرقمي وبناء قواعد بياناته.',

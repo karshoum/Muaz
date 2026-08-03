@@ -32,7 +32,7 @@ function Frame({ url, children }: { url?: string; children: ReactNode }) {
   );
 }
 
-/* ————————————————— ١. منصة د. أبوذر الكودة ————————————————— */
+/* ————————————————— ١. نظام إداري تعليمي متعدد الأدوار ————————————————— */
 
 const abozerRoles = [
   { label: 'طالب', tint: '#E8EEFF' },
@@ -60,7 +60,7 @@ function AbozerPreview() {
         <div className="flex items-center gap-1.5">
           <div className="text-end">
             <p className="text-[8px] font-bold leading-tight text-[#1E293B]">
-              مؤسسة د. أبوذر الكودة التعليمية
+              لوحة إدارة تعليمية
             </p>
             <p className="text-[6px] leading-tight text-[#2B2E83]">الوضع التجريبي</p>
           </div>
@@ -159,7 +159,7 @@ function ParadisePreview() {
   );
 }
 
-/* ————————————————— ٣. اتحاد المسيرية الزرق ————————————————— */
+/* ————————————————— ٣. أرشيف ووثائق تاريخية ————————————————— */
 
 function MusayriaPreview() {
   return (
@@ -168,7 +168,7 @@ function MusayriaPreview() {
         <span className="text-[7px] text-white">☰ القائمة</span>
         <div className="flex items-center gap-1.5">
           <span className="text-[8px] font-bold text-white">
-            اتحاد المسيرية الزرق
+            بوابة الوثائق التاريخية
           </span>
           <span className="grid h-4 w-4 place-items-center rounded-full border border-[#B8873B] bg-white text-[6px] text-[#13293D]">
             ⚑
@@ -186,7 +186,7 @@ function MusayriaPreview() {
               المنشورات
             </p>
             <p className="text-[6px] leading-tight text-[#7A8794]">
-              قرارات الاتحاد ومنصة نقاش الأعضاء
+              أرشيف موثّق ومنصة نقاش الأعضاء
             </p>
           </div>
         </div>
@@ -194,7 +194,7 @@ function MusayriaPreview() {
         <div className="mt-2 rounded-xl border border-[#EAE3D6] bg-white p-2">
           <div className="flex items-center justify-end gap-1.5">
             <span className="text-[7.5px] font-bold text-[#13293D]">
-              محمد كرشوم حسن
+              عضو الهيئة التحريرية
             </span>
             <span className="h-4 w-4 rounded-full bg-[#D8C7A8]" />
           </div>
@@ -209,7 +209,7 @@ function MusayriaPreview() {
           </div>
 
           <p className="mt-1 text-end text-[7px] font-bold text-[#13293D]">
-            نشأة وتطور الإدارة الأهلية لدى المسيرية الزرق
+            نشأة وتطور الإدارة الأهلية وتوثيقها
           </p>
 
           <div className="mt-1 space-y-[3px]">
@@ -224,7 +224,7 @@ function MusayriaPreview() {
         <div className="mt-1.5 rounded-xl border border-[#EAE3D6] bg-white p-2">
           <div className="flex items-center justify-end gap-1.5">
             <span className="text-[7px] font-bold text-[#13293D]">
-              عمر سليمان آدم
+              باحث مساهم
             </span>
             <span className="h-3.5 w-3.5 rounded-full bg-[#C9D6DF]" />
           </div>
