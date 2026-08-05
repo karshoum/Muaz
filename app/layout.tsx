@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     'تقانة المعلومات',
     'مطور Next.js',
     'قواعد بيانات',
-    'أم درمان',
+    'الخرطوم',
   ],
   authors: [{ name: profile.name }],
   creator: profile.name,
@@ -93,7 +93,7 @@ const personJsonLd = {
   url: profile.siteUrl,
   address: {
     '@type': 'PostalAddress',
-    addressLocality: 'أم درمان',
+    addressLocality: 'الخرطوم',
     addressCountry: 'SD',
   },
   alumniOf: {
