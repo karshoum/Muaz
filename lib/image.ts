@@ -66,6 +66,41 @@ export async function compressImage(
   return blob ?? source;
 }
 
+/**
+ * هل تحتوي الصورة على مناطق شفافة فعلاً؟
+ *
+ * يُستخدم عند رفع صورة من معرض الجهاز: إن كانت مفرّغة الخلفية مسبقاً
+ * (PNG شفاف) نحفظها PNG بدل تحويلها JPEG بخلفية بيضاء فنفقد الشفافية.
+ * نفحص نسخة مصغّرة لأن الفحص بالحجم الكامل بطيء بلا فائدة.
+ */
+export async function hasTransparency(source: Blob): Promise<boolean> {
+  // JPEG لا يدعم الشفافية أصلاً — نوفّر الفحص
+  if (source.type === 'image/jpeg' || source.type === 'image/jpg') return false;
+
+  try {
+    const img = await loadImageElement(source);
+    const scale = Math.min(1, 320 / Math.max(img.width, img.height));
+    const width = Math.max(1, Math.round(img.width * scale));
+    const height = Math.max(1, Math.round(img.height * scale));
+
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
+    if (!ctx) return false;
+
+    ctx.drawImage(img, 0, 0, width, height);
+    const { data } = ctx.getImageData(0, 0, width, height);
+
+    for (let i = 3; i < data.length; i += 4) {
+      if (data[i] < 250) return true;
+    }
+    return false;
+  } catch {
+    return false;
+  }
+}
+
 export function blobToDataUrl(blob: Blob): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();

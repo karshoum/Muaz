@@ -7,7 +7,7 @@ import { useToast } from '@/components/ui/Toast';
 import { CameraCapture } from '@/components/admin/CameraCapture';
 import { BackgroundRemover } from '@/components/admin/BackgroundRemover';
 import { uploadImage } from '@/lib/data';
-import { compressImage, humanFileSize, isImageFile } from '@/lib/image';
+import { compressImage, hasTransparency, humanFileSize, isImageFile } from '@/lib/image';
 import { MAX_UPLOAD_BYTES } from '@/lib/constants';
 import { cn } from '@/lib/utils';
 import type { ProductImage } from '@/lib/data/types';
@@ -47,9 +47,14 @@ export function ImagePicker({ value, onChange, max = 6 }: ImagePickerProps) {
       }
       setUploading(true);
       try {
-        const compressed = await compressImage(blob, { preserveTransparency: false });
+        // نحترم الشفافية إن كانت الصورة مفرّغة الخلفية مسبقاً
+        const transparent = await hasTransparency(blob);
+        const compressed = await compressImage(blob, { preserveTransparency: transparent });
         const url = await uploadImage(compressed, fileName);
-        onChange([...value, { id: newImageId(), url, backgroundRemoved: false }]);
+        onChange([
+          ...value,
+          { id: newImageId(), url, backgroundRemoved: transparent },
+        ]);
       } catch (err) {
         toast(err instanceof Error ? err.message : 'تعذّر رفع الصورة.', 'error');
       } finally {
@@ -86,14 +91,21 @@ export function ImagePicker({ value, onChange, max = 6 }: ImagePickerProps) {
             );
             continue;
           }
-          const compressed = await compressImage(file, { preserveTransparency: false });
+          // الصور المفرّغة مسبقاً (PNG شفاف) تُحفظ بشفافيتها بدل تحويلها JPEG أبيض
+          const transparent = await hasTransparency(file);
+          const compressed = await compressImage(file, { preserveTransparency: transparent });
           const url = await uploadImage(compressed, file.name.replace(/\.[^.]+$/, ''));
-          added.push({ id: newImageId(), url, backgroundRemoved: false });
+          added.push({ id: newImageId(), url, backgroundRemoved: transparent });
         }
 
         if (added.length > 0) {
           onChange([...value, ...added]);
-          toast(`تمت إضافة ${added.length} صورة. التفريغ اختياري من زر كل صورة.`);
+          const transparentCount = added.filter((image) => image.backgroundRemoved).length;
+          toast(
+            transparentCount === added.length
+              ? `تمت إضافة ${added.length} صورة مفرّغة الخلفية.`
+              : `تمت إضافة ${added.length} صورة. التفريغ اختياري من زر كل صورة.`,
+          );
         }
         if (list.length > room) {
           toast(`تم تجاهل ${list.length - room} صورة لتجاوز الحد الأقصى.`, 'error');
