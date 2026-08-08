@@ -17,10 +17,10 @@ import { cn } from '@/lib/utils';
 
 type SortKey = 'newest' | 'price-asc' | 'price-desc' | 'rating';
 
-const SORT_OPTIONS: Array<{ value: SortKey; label: string }> = [
+const SORT_OPTIONS: Array<{ value: SortKey; label: string; needsPrices?: boolean }> = [
   { value: 'newest', label: 'الأحدث أولاً' },
-  { value: 'price-asc', label: 'السعر: من الأقل' },
-  { value: 'price-desc', label: 'السعر: من الأعلى' },
+  { value: 'price-asc', label: 'السعر: من الأقل', needsPrices: true },
+  { value: 'price-desc', label: 'السعر: من الأعلى', needsPrices: true },
   { value: 'rating', label: 'الأعلى تقييماً' },
 ];
 
@@ -129,11 +129,13 @@ function ProductsBrowser() {
           aria-label="ترتيب النتائج"
           className="w-48"
         >
-          {SORT_OPTIONS.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
+          {SORT_OPTIONS.filter((option) => settings.showPrices || !option.needsPrices).map(
+            (option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ),
+          )}
         </Select>
       </div>
 

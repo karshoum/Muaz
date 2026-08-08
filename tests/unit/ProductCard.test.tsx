@@ -29,14 +29,23 @@ describe('ProductCard', () => {
     expect(screen.getByText('ALR-WD-3015')).toBeInTheDocument();
   });
 
-  it('يعرض السعر بالجنيه السوداني مع السعر قبل الخصم', () => {
+  it('يُخفي السعر افتراضياً ويعرض «السعر عند الطلب»', () => {
     render(<ProductCard product={product} settings={settings} />);
+    expect(screen.queryByTestId('price')).not.toBeInTheDocument();
+    expect(screen.getByText('السعر عند الطلب')).toBeInTheDocument();
+  });
+
+  it('يعرض السعر والسعر قبل الخصم عند تفعيل إظهار الأسعار', () => {
+    render(<ProductCard product={product} settings={{ ...settings, showPrices: true }} />);
     expect(screen.getByTestId('price')).toHaveTextContent('520,000 ج.س');
     expect(screen.getByTestId('old-price')).toHaveTextContent('590,000 ج.س');
   });
 
-  it('يعرض شارة الخصم عند وجود سعر قديم أعلى', () => {
+  it('يعرض شارة الخصم عند إظهار الأسعار فقط', () => {
     render(<ProductCard product={product} settings={settings} />);
+    expect(screen.queryByText('خصم')).not.toBeInTheDocument();
+
+    render(<ProductCard product={product} settings={{ ...settings, showPrices: true }} />);
     expect(screen.getByText('خصم')).toBeInTheDocument();
   });
 
@@ -67,7 +76,12 @@ describe('ProductCard', () => {
   });
 
   it('لا يعرض سعراً قديماً إذا لم يكن هناك خصم', () => {
-    render(<ProductCard product={{ ...product, oldPrice: null }} settings={settings} />);
+    render(
+      <ProductCard
+        product={{ ...product, oldPrice: null }}
+        settings={{ ...settings, showPrices: true }}
+      />,
+    );
     expect(screen.queryByTestId('old-price')).not.toBeInTheDocument();
   });
 });

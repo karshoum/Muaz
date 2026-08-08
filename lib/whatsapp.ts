@@ -74,6 +74,8 @@ export interface OrderMessageOptions {
   /** رابط صفحة المنتج الكامل — يُضاف للرسالة إن توفر */
   productUrl?: string;
   currency?: string;
+  /** حين تكون false يُحذف السعر من الرسالة ويُطلب من المعرض */
+  showPrices?: boolean;
 }
 
 /**
@@ -82,30 +84,38 @@ export interface OrderMessageOptions {
  */
 export function buildOrderMessage(product: Product, options: OrderMessageOptions = {}): string {
   const currency = options.currency ?? 'ج.س';
+  const showPrices = options.showPrices ?? false;
+
   const lines = [
     'السلام عليكم ورحمة الله 👋',
     `أرغب في طلب هذه القطعة من ${SITE_FULL_NAME}:`,
     '',
     `🛋️ القطعة: ${product.name}`,
     `🔖 الكود: ${product.code}`,
-    `💰 السعر: ${formatPrice(product.price, currency)}`,
   ];
+
+  if (showPrices) {
+    lines.push(`💰 السعر: ${formatPrice(product.price, currency)}`);
+  }
 
   if (options.productUrl) {
     lines.push(`🔗 الرابط: ${options.productUrl}`);
   }
 
-  lines.push('', 'برجاء إفادتي بالتوفر وطريقة التوصيل. شكراً لكم.');
+  lines.push(
+    '',
+    showPrices
+      ? 'برجاء إفادتي بالتوفر وطريقة التوصيل. شكراً لكم.'
+      : 'برجاء إفادتي بالسعر والتوفر وطريقة التوصيل. شكراً لكم.',
+  );
   return lines.join('\n');
 }
 
 /** نص مختصر يُنسخ إلى حافظة العميل عند الطلب */
-export function buildCopyText(product: Product, currency = 'ج.س'): string {
-  return [
-    product.name,
-    `الكود: ${product.code}`,
-    `السعر: ${formatPrice(product.price, currency)}`,
-  ].join(' | ');
+export function buildCopyText(product: Product, currency = 'ج.س', showPrices = false): string {
+  const parts = [product.name, `الكود: ${product.code}`];
+  if (showPrices) parts.push(`السعر: ${formatPrice(product.price, currency)}`);
+  return parts.join(' | ');
 }
 
 /**
@@ -121,12 +131,13 @@ export function buildWhatsAppUrl(phone: string | null | undefined, message: stri
 /** الرابط الكامل لطلب منتج بعينه، انطلاقاً من إعدادات الموقع */
 export function buildProductOrderUrl(
   product: Product,
-  settings: Pick<SiteSettings, 'whatsappNumber' | 'currency'>,
+  settings: Pick<SiteSettings, 'whatsappNumber' | 'currency'> & { showPrices?: boolean },
   productUrl?: string,
 ): string {
   const message = buildOrderMessage(product, {
     productUrl,
     currency: settings.currency,
+    showPrices: settings.showPrices,
   });
   return buildWhatsAppUrl(settings.whatsappNumber, message);
 }

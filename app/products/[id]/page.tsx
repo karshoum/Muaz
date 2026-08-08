@@ -122,13 +122,19 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
                   </span>
                 </div>
 
-                <PriceTag
-                  price={product.price}
-                  oldPrice={product.oldPrice}
-                  currency={settings.currency}
-                  size="lg"
-                  className="mt-5"
-                />
+                {settings.showPrices ? (
+                  <PriceTag
+                    price={product.price}
+                    oldPrice={product.oldPrice}
+                    currency={settings.currency}
+                    size="lg"
+                    className="mt-5"
+                  />
+                ) : (
+                  <p className="mt-5 text-xl font-extrabold text-gold-600">
+                    السعر عند الطلب — راسلنا على واتساب
+                  </p>
+                )}
 
                 {product.description && (
                   <div className="mt-5 rounded-xl border border-softgray bg-white p-4">
@@ -151,7 +157,9 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
                     variant="outline"
                     size="lg"
                     onClick={async () => {
-                      const ok = await copyToClipboard(buildCopyText(product, settings.currency));
+                      const ok = await copyToClipboard(
+                        buildCopyText(product, settings.currency, settings.showPrices),
+                      );
                       toast(
                         ok ? 'تم نسخ بيانات القطعة.' : 'تعذّر النسخ، انسخ البيانات يدوياً.',
                         ok ? 'success' : 'error',
@@ -164,8 +172,9 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
                 </div>
 
                 <p className="mt-4 text-xs leading-relaxed text-navy-300">
-                  عند الضغط على زر واتساب تُنسخ بيانات القطعة تلقائياً وتُفتح محادثة تحتوي على اسم
-                  القطعة والكود والسعر جاهزة للإرسال.
+                  {settings.showPrices
+                    ? 'عند الضغط على زر واتساب تُنسخ بيانات القطعة تلقائياً وتُفتح محادثة تحتوي على اسم القطعة والكود والسعر جاهزة للإرسال.'
+                    : 'عند الضغط على زر واتساب تُنسخ بيانات القطعة تلقائياً وتُفتح محادثة تحتوي على اسم القطعة والكود جاهزة للإرسال، ويوافيك المعرض بالسعر.'}
                 </p>
               </div>
             </div>

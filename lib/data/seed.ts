@@ -3,9 +3,9 @@ import type { Product, ProductInput } from '@/lib/data/types';
 /**
  * كتالوج المعرض المبدئي — قطع حقيقية من معرض الراقي الهندسي بصورها.
  *
- * كل القطع تبدأ **غير منشورة** وبسعر صفر عن قصد: تظهر للمدير في لوحة
- * التحكم جاهزة بصورها وأسمائها، ولا يراها العملاء حتى يضع المدير السعر
- * ويفعّل "منشور للعملاء". هكذا لا يظهر سعر خاطئ لأي زائر.
+ * القطع منشورة بلا أسعار: الموقع يعمل بوضع «السعر عند الطلب»، فيرى
+ * العميل القطعة ويطلبها عبر واتساب ويوافيه المعرض بالسعر. يمكن تفعيل
+ * إظهار الأسعار لاحقاً من لوحة التحكم ← الإعدادات.
  */
 const CATALOG: Array<Omit<ProductInput, 'images'> & { image: string }> = [
   {
@@ -18,7 +18,7 @@ const CATALOG: Array<Omit<ProductInput, 'images'> & { image: string }> = [
     category: 'living',
     rating: 5,
     featured: true,
-    published: false,
+    published: true,
     inStock: true,
     isDemo: false,
     image: '/images/products/sofa-royal-green.jpg',
@@ -33,7 +33,7 @@ const CATALOG: Array<Omit<ProductInput, 'images'> & { image: string }> = [
     category: 'living',
     rating: 5,
     featured: true,
-    published: false,
+    published: true,
     inStock: true,
     isDemo: false,
     image: '/images/products/sofa-royal-purple.jpg',
@@ -48,7 +48,7 @@ const CATALOG: Array<Omit<ProductInput, 'images'> & { image: string }> = [
     category: 'living',
     rating: 5,
     featured: true,
-    published: false,
+    published: true,
     inStock: true,
     isDemo: false,
     image: '/images/products/sofa-pink-3seater.jpg',
@@ -63,7 +63,7 @@ const CATALOG: Array<Omit<ProductInput, 'images'> & { image: string }> = [
     category: 'living',
     rating: 5,
     featured: false,
-    published: false,
+    published: true,
     inStock: true,
     isDemo: false,
     image: '/images/products/armchair-pink.jpg',
@@ -78,7 +78,7 @@ const CATALOG: Array<Omit<ProductInput, 'images'> & { image: string }> = [
     category: 'living',
     rating: 4,
     featured: false,
-    published: false,
+    published: true,
     inStock: true,
     isDemo: false,
     image: '/images/products/sofa-channel-3seater.jpg',
@@ -93,7 +93,7 @@ const CATALOG: Array<Omit<ProductInput, 'images'> & { image: string }> = [
     category: 'living',
     rating: 4,
     featured: false,
-    published: false,
+    published: true,
     inStock: true,
     isDemo: false,
     image: '/images/products/sofa-maroon-3seater.jpg',
@@ -108,7 +108,7 @@ const CATALOG: Array<Omit<ProductInput, 'images'> & { image: string }> = [
     category: 'living',
     rating: 4,
     featured: false,
-    published: false,
+    published: true,
     inStock: true,
     isDemo: false,
     image: '/images/products/sofa-gold-2seater.jpg',
@@ -123,7 +123,7 @@ const CATALOG: Array<Omit<ProductInput, 'images'> & { image: string }> = [
     category: 'living',
     rating: 4,
     featured: false,
-    published: false,
+    published: true,
     inStock: true,
     isDemo: false,
     image: '/images/products/sofa-purple-3seater.jpg',
@@ -138,7 +138,7 @@ const CATALOG: Array<Omit<ProductInput, 'images'> & { image: string }> = [
     category: 'living',
     rating: 4,
     featured: false,
-    published: false,
+    published: true,
     inStock: true,
     isDemo: false,
     image: '/images/products/set-purple-cream.jpg',
@@ -153,7 +153,7 @@ const CATALOG: Array<Omit<ProductInput, 'images'> & { image: string }> = [
     category: 'living',
     rating: 4,
     featured: false,
-    published: false,
+    published: true,
     inStock: true,
     isDemo: false,
     image: '/images/products/sectional-cream.jpg',
@@ -168,7 +168,7 @@ const CATALOG: Array<Omit<ProductInput, 'images'> & { image: string }> = [
     category: 'living',
     rating: 5,
     featured: false,
-    published: false,
+    published: true,
     inStock: true,
     isDemo: false,
     image: '/images/products/chaise-maroon.jpg',
@@ -183,7 +183,7 @@ const CATALOG: Array<Omit<ProductInput, 'images'> & { image: string }> = [
     category: 'decor',
     rating: 5,
     featured: true,
-    published: false,
+    published: true,
     inStock: true,
     isDemo: false,
     image: '/images/products/cabinet-white-gold.jpg',
@@ -198,7 +198,7 @@ const CATALOG: Array<Omit<ProductInput, 'images'> & { image: string }> = [
     category: 'decor',
     rating: 4,
     featured: false,
-    published: false,
+    published: true,
     inStock: true,
     isDemo: false,
     image: '/images/products/pouf-storage.jpg',
@@ -213,7 +213,7 @@ const CATALOG: Array<Omit<ProductInput, 'images'> & { image: string }> = [
     category: 'decor',
     rating: 4,
     featured: false,
-    published: false,
+    published: true,
     inStock: true,
     isDemo: false,
     image: '/images/products/trays-wooden-set.jpg',

@@ -40,7 +40,7 @@ describe('WhatsAppOrderButton', () => {
     expect(button).toHaveAccessibleName(expect.stringContaining('طاولة طعام رخامية'));
   });
 
-  it('ينسخ بيانات القطعة (الاسم والكود والسعر) عند الضغط', async () => {
+  it('ينسخ اسم القطعة وكودها عند الضغط', async () => {
     render(<WhatsAppOrderButton product={product} settings={settings} />);
     await userEvent.click(screen.getByTestId('whatsapp-order-button'));
 
@@ -48,7 +48,6 @@ describe('WhatsAppOrderButton', () => {
     const copied = writeText.mock.calls[0][0] as string;
     expect(copied).toContain('طاولة طعام رخامية');
     expect(copied).toContain('ALR-DN-5044');
-    expect(copied).toContain('960,000 ج.س');
   });
 
   it('يفتح رابط واتساب برسالة تحتوي بيانات القطعة', async () => {
@@ -63,6 +62,26 @@ describe('WhatsAppOrderButton', () => {
     const text = url.searchParams.get('text') ?? '';
     expect(text).toContain('طاولة طعام رخامية');
     expect(text).toContain('ALR-DN-5044');
+  });
+
+  it('لا يُرسل السعر ما لم يُفعّل إظهار الأسعار', async () => {
+    render(<WhatsAppOrderButton product={product} settings={settings} />);
+    await userEvent.click(screen.getByTestId('whatsapp-order-button'));
+
+    await waitFor(() => expect(openSpy).toHaveBeenCalled());
+    const text = new URL(openSpy.mock.calls[0][0] as string).searchParams.get('text') ?? '';
+    expect(text).not.toContain('960,000');
+    expect(text).toContain('برجاء إفادتي بالسعر');
+  });
+
+  it('يُرسل السعر عند تفعيل إظهار الأسعار', async () => {
+    render(
+      <WhatsAppOrderButton product={product} settings={{ ...settings, showPrices: true }} />,
+    );
+    await userEvent.click(screen.getByTestId('whatsapp-order-button'));
+
+    await waitFor(() => expect(openSpy).toHaveBeenCalled());
+    const text = new URL(openSpy.mock.calls[0][0] as string).searchParams.get('text') ?? '';
     expect(text).toContain('960,000 ج.س');
   });
 

@@ -11,12 +11,14 @@ import type { Product, SiteSettings } from '@/lib/data/types';
 
 interface ProductCardProps {
   product: Product;
-  settings: Pick<SiteSettings, 'whatsappNumber' | 'currency'>;
+  settings: Pick<SiteSettings, 'whatsappNumber' | 'currency'> & { showPrices?: boolean };
   className?: string;
 }
 
 export function ProductCard({ product, settings, className }: ProductCardProps) {
-  const hasDiscount = typeof product.oldPrice === 'number' && product.oldPrice > product.price;
+  const showPrices = settings.showPrices ?? false;
+  const hasDiscount =
+    showPrices && typeof product.oldPrice === 'number' && product.oldPrice > product.price;
 
   return (
     <article
@@ -64,12 +66,16 @@ export function ProductCard({ product, settings, className }: ProductCardProps) 
           </span>
         </div>
 
-        <PriceTag
-          price={product.price}
-          oldPrice={product.oldPrice}
-          currency={settings.currency}
-          className="mt-auto pt-1"
-        />
+        {showPrices ? (
+          <PriceTag
+            price={product.price}
+            oldPrice={product.oldPrice}
+            currency={settings.currency}
+            className="mt-auto pt-1"
+          />
+        ) : (
+          <p className="mt-auto pt-1 text-sm font-bold text-gold-600">السعر عند الطلب</p>
+        )}
 
         <WhatsAppOrderButton
           product={product}

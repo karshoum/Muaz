@@ -39,7 +39,6 @@ test.describe('لوحة تحكم المدير', () => {
     await page.goto('/admin/products/new');
 
     await page.getByLabel('اسم القطعة').fill('قطعة اختبار آلي');
-    await page.getByLabel('السعر (بالجنيه السوداني)').fill('123456');
 
     // رفع صورة من "معرض الجهاز"
     await page.getByTestId('image-file-input').setInputFiles({
@@ -71,7 +70,6 @@ test.describe('لوحة تحكم المدير', () => {
     await login(page);
     await page.goto('/admin/products/new');
     await page.getByLabel('اسم القطعة').fill('كرسي يظهر للعملاء');
-    await page.getByLabel('السعر (بالجنيه السوداني)').fill('99000');
     await page.getByRole('button', { name: 'إضافة القطعة' }).click();
     await expect(page).toHaveURL(/\/admin\/products$/);
 
@@ -104,15 +102,31 @@ test.describe('لوحة تحكم المدير', () => {
     expect(String(await opened.jsonValue())).toContain('wa.me/249999111222');
   });
 
-  test('يمكن حذف البيانات التجريبية دفعة واحدة', async ({ page }) => {
+  test('يمكن حذف قطعة نهائياً بعد التأكيد', async ({ page }) => {
     await login(page);
-    await page.goto('/admin/products');
+    await page.goto('/admin/products/new');
+    await page.getByLabel('اسم القطعة').fill('قطعة للحذف');
+    await page.getByRole('button', { name: 'إضافة القطعة' }).click();
+    await expect(page).toHaveURL(/\/admin\/products$/);
 
-    const cleanupButton = page.getByRole('button', { name: /مسح البيانات التجريبية/ });
-    await expect(cleanupButton).toBeVisible();
-    await cleanupButton.click();
-    await page.getByRole('button', { name: 'نعم، امسحها' }).click();
+    const row = page.getByText('قطعة للحذف').filter({ visible: true }).first();
+    await expect(row).toBeVisible();
 
-    await expect(cleanupButton).toBeHidden({ timeout: 15_000 });
+    await page.getByPlaceholder('ابحث بالاسم أو الكود...').fill('قطعة للحذف');
+    await page.getByRole('button', { name: 'حذف' }).first().click();
+    await page.getByRole('button', { name: 'نعم، احذف' }).click();
+
+    await expect(page.getByText('قطعة للحذف').filter({ visible: true })).toHaveCount(0, {
+      timeout: 15_000,
+    });
+  });
+
+  test('الأسعار مخفية افتراضياً ويظهر بدلاً منها «السعر عند الطلب»', async ({ page }) => {
+    await page.goto('/products');
+    await page.waitForSelector('[data-testid="product-card"]');
+
+    const card = page.getByTestId('product-card').first();
+    await expect(card.getByText('السعر عند الطلب')).toBeVisible();
+    await expect(card.getByTestId('price')).toHaveCount(0);
   });
 });

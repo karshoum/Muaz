@@ -41,9 +41,10 @@ export function ProductForm({ product, existingCodes = [] }: ProductFormProps) {
     const next: Record<string, string> = {};
     if (!name.trim()) next.name = 'اسم القطعة مطلوب.';
     if (!code.trim()) next.code = 'كود القطعة مطلوب.';
-    const priceValue = Number(price);
-    if (!price.trim() || Number.isNaN(priceValue) || priceValue <= 0) {
-      next.price = 'أدخل سعراً صحيحاً أكبر من صفر.';
+    // السعر اختياري — الموقع قد يعمل بوضع "السعر عند الطلب"
+    const priceValue = Number(price || 0);
+    if (price.trim() && (Number.isNaN(priceValue) || priceValue < 0)) {
+      next.price = 'أدخل رقماً صحيحاً أو اترك الحقل فارغاً.';
     }
     if (oldPrice.trim()) {
       const oldValue = Number(oldPrice);
@@ -67,7 +68,7 @@ export function ProductForm({ product, existingCodes = [] }: ProductFormProps) {
       name: name.trim(),
       code: code.trim(),
       category,
-      price: Number(price),
+      price: Number(price || 0),
       oldPrice: oldPrice.trim() ? Number(oldPrice) : null,
       description: description.trim(),
       rating: Number(rating),
@@ -158,7 +159,11 @@ export function ProductForm({ product, existingCodes = [] }: ProductFormProps) {
             )}
           </Field>
 
-          <Field label="السعر (بالجنيه السوداني)" required error={errors.price}>
+          <Field
+            label="السعر (اختياري)"
+            error={errors.price}
+            hint="اتركه فارغاً ليظهر «السعر عند الطلب». يظهر للعملاء فقط إذا فعّلت إظهار الأسعار من الإعدادات."
+          >
             {(id) => (
               <Input
                 id={id}
@@ -167,7 +172,7 @@ export function ProductForm({ product, existingCodes = [] }: ProductFormProps) {
                 min={0}
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
-                placeholder="450000"
+                placeholder="اتركه فارغاً"
                 className="ltr-nums"
               />
             )}

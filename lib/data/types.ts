@@ -67,6 +67,12 @@ export interface SiteSettings {
   twitter: string;
   /** رمز العملة الظاهر بجانب الأسعار */
   currency: string;
+  /**
+   * إظهار الأسعار في الموقع.
+   * حين تكون false تختفي الأسعار من البطاقات وصفحات المنتجات ورسالة
+   * الواتساب، ويُطلب السعر من المعرض مباشرة.
+   */
+  showPrices: boolean;
   workingHours: string;
   mapUrl: string;
 }

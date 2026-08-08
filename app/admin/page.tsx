@@ -119,15 +119,19 @@ export default function AdminDashboardPage() {
               <dd className="text-end font-semibold text-navy">{settings.address || '—'}</dd>
             </div>
             <div className="flex items-start justify-between gap-3">
-              <dt className="text-navy-300">العملة</dt>
-              <dd className="font-bold text-navy">{settings.currency}</dd>
-            </div>
-            <div className="flex items-start justify-between gap-3">
-              <dt className="text-navy-300">إجمالي قيمة المعروض</dt>
-              <dd className="ltr-nums font-bold text-gold-600">
-                {formatPrice(stats.totalValue, settings.currency)}
+              <dt className="text-navy-300">عرض الأسعار</dt>
+              <dd className="font-bold text-navy">
+                {settings.showPrices ? `ظاهرة (${settings.currency})` : 'مخفية — السعر عند الطلب'}
               </dd>
             </div>
+            {settings.showPrices && (
+              <div className="flex items-start justify-between gap-3">
+                <dt className="text-navy-300">إجمالي قيمة المعروض</dt>
+                <dd className="ltr-nums font-bold text-gold-600">
+                  {formatPrice(stats.totalValue, settings.currency)}
+                </dd>
+              </div>
+            )}
           </dl>
           <Link
             href="/admin/settings"

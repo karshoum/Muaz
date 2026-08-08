@@ -91,16 +91,20 @@ describe('localAdapter — كتالوج المعرض المبدئي', () => {
     expect(second).toHaveLength(first.length);
   });
 
-  it('قطع الكتالوج تبدأ غير منشورة فلا يرى العميل سعراً خاطئاً', async () => {
+  it('قطع الكتالوج منشورة للعملاء بصورها وبلا أسعار', async () => {
     await localAdapter.seedIfEmpty();
 
     const forCustomers = await localAdapter.listProducts();
-    expect(forCustomers).toHaveLength(0);
+    expect(forCustomers.length).toBeGreaterThan(0);
+    expect(forCustomers.every((p) => p.images.length > 0)).toBe(true);
+    // بلا تسعير — الموقع يعمل بوضع «السعر عند الطلب»
+    expect(forCustomers.every((p) => p.price === 0)).toBe(true);
+    expect(forCustomers.every((p) => p.code.startsWith('ALR-'))).toBe(true);
+  });
 
-    const forAdmin = await localAdapter.listProducts({ includeUnpublished: true });
-    expect(forAdmin.length).toBeGreaterThan(0);
-    expect(forAdmin.every((p) => p.price === 0)).toBe(true);
-    expect(forAdmin.every((p) => p.images.length > 0)).toBe(true);
+  it('الإعدادات المبدئية تُخفي الأسعار', async () => {
+    const settings = await localAdapter.getSettings();
+    expect(settings.showPrices).toBe(false);
   });
 
   it('يحذف المنتجات الموسومة تجريبية فقط ويُبقي غيرها', async () => {

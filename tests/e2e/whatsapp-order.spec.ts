@@ -37,7 +37,8 @@ test.describe('الطلب المباشر عبر واتساب', () => {
     const message = url.searchParams.get('text') ?? '';
     expect(message).toContain(productName);
     expect(message).toContain(code);
-    expect(message).toContain('السعر');
+    // الوضع الافتراضي بلا أسعار: العميل يسأل عن السعر
+    expect(message).toContain('برجاء إفادتي بالسعر');
   });
 
   test('يظهر إشعار بنسخ بيانات القطعة عند الطلب', async ({ page }) => {
@@ -51,25 +52,30 @@ test.describe('الطلب المباشر عبر واتساب', () => {
     await expect(page.getByTestId('toast').first()).toBeVisible();
   });
 
-  test('صفحة تفاصيل القطعة تعرض الكود والسعر وزر الطلب', async ({ page }) => {
+  test('صفحة تفاصيل القطعة تعرض الكود وحالة السعر وزر الطلب', async ({ page }) => {
     await page.goto('/products');
     await page.waitForSelector('[data-testid="product-card"]');
     await page.getByTestId('product-card').first().locator('a').first().click();
 
     // نقصر التحقق على تفاصيل القطعة نفسها دون بطاقات "قطع مشابهة"
     await expect(page.getByText(/كود القطعة:/)).toBeVisible();
-    await expect(page.getByTestId('price').first()).toBeVisible();
+    await expect(page.getByText(/السعر عند الطلب/).first()).toBeVisible();
     await expect(page.getByTestId('whatsapp-order-button').first()).toBeVisible();
   });
 
-  test('البحث والتصفية بالقسم يعملان', async ({ page }) => {
-    await page.goto('/products?category=bedrooms');
+  test('التصفية بالقسم تعرض قطع ذلك القسم وحده', async ({ page }) => {
+    await page.goto('/products?category=living');
     await page.waitForSelector('[data-testid="product-card"]');
 
     const cards = page.getByTestId('product-card');
     await expect(cards.first()).toBeVisible();
     for (const card of await cards.all()) {
-      await expect(card.getByText('غرف نوم')).toBeVisible();
+      await expect(card.getByText('أثاث غرف المعيشة')).toBeVisible();
     }
+  });
+
+  test('قسم بلا قطع يعرض رسالة واضحة بدل صفحة فارغة', async ({ page }) => {
+    await page.goto('/products?category=bedrooms');
+    await expect(page.getByText('لا توجد نتائج')).toBeVisible();
   });
 });

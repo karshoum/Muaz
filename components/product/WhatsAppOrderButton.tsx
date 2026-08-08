@@ -15,7 +15,7 @@ import type { Product, SiteSettings } from '@/lib/data/types';
 
 interface WhatsAppOrderButtonProps extends Omit<ButtonProps, 'onClick' | 'children'> {
   product: Product;
-  settings: Pick<SiteSettings, 'whatsappNumber' | 'currency'>;
+  settings: Pick<SiteSettings, 'whatsappNumber' | 'currency'> & { showPrices?: boolean };
   label?: string;
 }
 
@@ -48,10 +48,13 @@ export function WhatsAppOrderButton({
     setBusy(true);
     try {
       const productUrl = absoluteUrl(`/products/${product.id}`);
-      const copied = await copyToClipboard(buildCopyText(product, settings.currency));
+      const copied = await copyToClipboard(
+        buildCopyText(product, settings.currency, settings.showPrices),
+      );
       const message = buildOrderMessage(product, {
         productUrl,
         currency: settings.currency,
+        showPrices: settings.showPrices,
       });
       const url = buildWhatsAppUrl(settings.whatsappNumber, message);
 

@@ -104,6 +104,8 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   tiktok: '',
   twitter: '',
   currency: 'ج.س',
+  // الأسعار مخفية افتراضياً — العميل يسأل عن السعر عبر واتساب
+  showPrices: false,
   workingHours: 'السبت - الخميس: 9 صباحاً - 9 مساءً',
   mapUrl: '',
 };

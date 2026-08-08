@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/Button';
-import { Field, Input } from '@/components/ui/Field';
+import { Checkbox, Field, Input } from '@/components/ui/Field';
 import { PageLoader } from '@/components/ui/Spinner';
 import { useToast } from '@/components/ui/Toast';
 import { useSettings } from '@/lib/settings/SettingsProvider';
@@ -151,16 +151,29 @@ export default function AdminSettingsPage() {
               )}
             </Field>
 
-            <Field label="رمز العملة" hint="يظهر بجانب كل الأسعار">
+            <Field label="رمز العملة" hint="يظهر بجانب الأسعار عند تفعيل إظهارها">
               {(id) => (
                 <Input
                   id={id}
                   value={form.currency}
                   onChange={(e) => set('currency', e.target.value)}
                   placeholder="ج.س"
+                  disabled={!form.showPrices}
                 />
               )}
             </Field>
+
+            <div className="sm:col-span-2">
+              <Checkbox
+                label="إظهار الأسعار للعملاء"
+                checked={form.showPrices}
+                onChange={(e) => set('showPrices', e.target.checked)}
+              />
+              <p className="mt-1.5 text-xs leading-relaxed text-navy-300">
+                عند إيقافه تختفي الأسعار من كل الموقع ويظهر بدلاً منها «السعر عند الطلب»، ولا
+                يُرسل السعر في رسالة الواتساب بل يطلبه العميل منك.
+              </p>
+            </div>
 
             <Field
               label="شريط الإعلانات العلوي"

@@ -2,6 +2,15 @@ import { expect, test, type Page } from '@playwright/test';
 
 const DEMO_PASSWORD = 'admin1234';
 
+/**
+ * صورة JPEG معتمة صغيرة. لا نستخدم PNG شفافاً هنا لأن التطبيق يعتبر
+ * الصورة الشفافة مفرّغة الخلفية مسبقاً فيُخفي زر التفريغ عنها.
+ */
+const OPAQUE_JPEG = Buffer.from(
+  '/9j/2wBDAAoHBwgHBgoICAgLCgoLDhgQDg0NDh0VFhEYIx8lJCIfIiEmKzcvJik0KSEiMEExNDk7Pj4+JS5ESUM8SDc9Pjv/2wBDAQoLCw4NDhwQEBw7KCIoOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozv/wAARCAAIAAgDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAX/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFAEBAAAAAAAAAAAAAAAAAAAABf/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/AJgAso//2Q==',
+  'base64',
+);
+
 async function login(page: Page) {
   await page.goto('/admin');
   await page.getByLabel('كلمة المرور').fill(DEMO_PASSWORD);
@@ -39,13 +48,9 @@ test.describe('الكاميرا وتفريغ الخلفية داخل لوحة ا
     await page.goto('/admin/products/new');
 
     await page.getByTestId('image-file-input').setInputFiles({
-      name: 'chair.png',
-      mimeType: 'image/png',
-      // صورة PNG صغيرة صالحة (بكسل واحد)
-      buffer: Buffer.from(
-        'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==',
-        'base64',
-      ),
+      name: 'chair.jpg',
+      mimeType: 'image/jpeg',
+      buffer: OPAQUE_JPEG,
     });
 
     await expect(page.getByTestId('image-list')).toBeVisible({ timeout: 15_000 });
@@ -66,12 +71,9 @@ test.describe('الكاميرا وتفريغ الخلفية داخل لوحة ا
 
     await page.goto('/admin/products/new');
     await page.getByTestId('image-file-input').setInputFiles({
-      name: 'chair.png',
-      mimeType: 'image/png',
-      buffer: Buffer.from(
-        'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==',
-        'base64',
-      ),
+      name: 'chair.jpg',
+      mimeType: 'image/jpeg',
+      buffer: OPAQUE_JPEG,
     });
     await expect(page.getByTestId('image-list')).toBeVisible({ timeout: 15_000 });
 
@@ -101,12 +103,9 @@ test.describe('الكاميرا وتفريغ الخلفية داخل لوحة ا
     await page.goto('/admin/products/new');
 
     await page.getByTestId('image-file-input').setInputFiles({
-      name: 'sofa.png',
-      mimeType: 'image/png',
-      buffer: Buffer.from(
-        'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==',
-        'base64',
-      ),
+      name: 'sofa.jpg',
+      mimeType: 'image/jpeg',
+      buffer: OPAQUE_JPEG,
     });
     await expect(page.getByTestId('image-list')).toBeVisible();
 

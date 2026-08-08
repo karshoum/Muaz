@@ -93,10 +93,6 @@ describe('buildOrderMessage — رسالة الطلب', () => {
     expect(message).toContain('ALR-BR-1042');
   });
 
-  it('يتضمن السعر بالجنيه السوداني', () => {
-    expect(message).toContain('450,000 ج.س');
-  });
-
   it('يتضمن رابط المنتج عند توفره', () => {
     expect(message).toContain('https://example.com/products/p-1');
   });
@@ -106,13 +102,30 @@ describe('buildOrderMessage — رسالة الطلب', () => {
     expect(withoutUrl).toContain('ALR-BR-1042');
     expect(withoutUrl).not.toContain('🔗');
   });
+
+  it('يحذف السعر افتراضياً ويطلبه من المعرض', () => {
+    expect(message).not.toContain('450,000');
+    expect(message).not.toContain('💰');
+    expect(message).toContain('برجاء إفادتي بالسعر');
+  });
+
+  it('يُدرج السعر عند تفعيل إظهار الأسعار', () => {
+    const withPrice = buildOrderMessage(product, { currency: 'ج.س', showPrices: true });
+    expect(withPrice).toContain('450,000 ج.س');
+    expect(withPrice).not.toContain('برجاء إفادتي بالسعر');
+  });
 });
 
 describe('buildCopyText — النص المنسوخ للحافظة', () => {
-  it('يجمع الاسم والكود والسعر', () => {
+  it('يجمع الاسم والكود بلا سعر افتراضياً', () => {
     const text = buildCopyText(product, 'ج.س');
     expect(text).toContain('سرير ملكي فاخر مبطّن');
     expect(text).toContain('ALR-BR-1042');
+    expect(text).not.toContain('450,000');
+  });
+
+  it('يضيف السعر عند تفعيل إظهار الأسعار', () => {
+    const text = buildCopyText(product, 'ج.س', true);
     expect(text).toContain('450,000 ج.س');
   });
 });
@@ -153,6 +166,16 @@ describe('buildProductOrderUrl — الرابط الكامل لطلب منتج',
     const text = new URL(url).searchParams.get('text') ?? '';
     expect(url).toContain('wa.me/249912345678');
     expect(text).toContain('ALR-BR-1042');
+    expect(text).not.toContain('450,000');
+  });
+
+  it('ينقل إعداد إظهار الأسعار إلى الرسالة', () => {
+    const url = buildProductOrderUrl(product, {
+      whatsappNumber: '0912345678',
+      currency: 'ج.س',
+      showPrices: true,
+    });
+    const text = new URL(url).searchParams.get('text') ?? '';
     expect(text).toContain('450,000 ج.س');
   });
 });
