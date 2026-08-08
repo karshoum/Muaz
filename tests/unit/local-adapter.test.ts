@@ -80,23 +80,35 @@ describe('localAdapter — عمليات المنتجات', () => {
   });
 });
 
-describe('localAdapter — البيانات التجريبية', () => {
-  it('يزرع المنتجات التجريبية عند أول تشغيل فقط', async () => {
+describe('localAdapter — كتالوج المعرض المبدئي', () => {
+  it('يزرع الكتالوج عند أول تشغيل فقط', async () => {
     await localAdapter.seedIfEmpty();
-    const first = await localAdapter.listProducts();
+    const first = await localAdapter.listProducts({ includeUnpublished: true });
     expect(first.length).toBeGreaterThan(0);
 
     await localAdapter.seedIfEmpty();
-    const second = await localAdapter.listProducts();
+    const second = await localAdapter.listProducts({ includeUnpublished: true });
     expect(second).toHaveLength(first.length);
   });
 
-  it('يحذف البيانات التجريبية فقط ويُبقي منتجات المدير', async () => {
+  it('قطع الكتالوج تبدأ غير منشورة فلا يرى العميل سعراً خاطئاً', async () => {
     await localAdapter.seedIfEmpty();
+
+    const forCustomers = await localAdapter.listProducts();
+    expect(forCustomers).toHaveLength(0);
+
+    const forAdmin = await localAdapter.listProducts({ includeUnpublished: true });
+    expect(forAdmin.length).toBeGreaterThan(0);
+    expect(forAdmin.every((p) => p.price === 0)).toBe(true);
+    expect(forAdmin.every((p) => p.images.length > 0)).toBe(true);
+  });
+
+  it('يحذف المنتجات الموسومة تجريبية فقط ويُبقي غيرها', async () => {
+    await localAdapter.createProduct({ ...sample, code: 'DEMO-1', isDemo: true });
     await localAdapter.createProduct(sample);
 
     const removed = await localAdapter.deleteDemoProducts();
-    expect(removed).toBeGreaterThan(0);
+    expect(removed).toBe(1);
 
     const remaining = await localAdapter.listProducts({ includeUnpublished: true });
     expect(remaining).toHaveLength(1);
