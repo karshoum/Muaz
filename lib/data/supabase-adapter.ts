@@ -87,8 +87,16 @@ function friendlyError(error: { message: string; code?: string }): Error {
   if (error.code === '42501' || /row-level security/i.test(error.message)) {
     return new Error('ليست لديك صلاحية لهذه العملية. سجّل الدخول كمدير أولاً.');
   }
-  if (/relation .* does not exist/i.test(error.message)) {
-    return new Error('جداول قاعدة البيانات غير موجودة. شغّل ملف supabase/schema.sql أولاً.');
+  // PostgREST يصوغ الرسالة بأكثر من شكل حسب الإصدار
+  if (
+    error.code === 'PGRST205' ||
+    /relation .* does not exist/i.test(error.message) ||
+    /could not find the table/i.test(error.message) ||
+    /schema cache/i.test(error.message)
+  ) {
+    return new Error(
+      'جداول قاعدة البيانات غير موجودة بعد. افتح لوحة Supabase ← SQL Editor، والصق محتوى ملف supabase/schema.sql ثم اضغط Run.',
+    );
   }
   return new Error(error.message);
 }
