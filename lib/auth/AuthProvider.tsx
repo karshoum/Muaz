@@ -2,6 +2,7 @@
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { getSupabase, isSupabaseConfigured } from '@/lib/supabase/client';
+import { resetSeedGate } from '@/lib/data';
 
 /**
  * كلمة مرور الوضع التجريبي (بدون Supabase).
@@ -97,6 +98,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
         throw new Error(error.message);
       }
+
+      // محاولة الزرع الأولى جرت والزائر مجهول فرفضتها RLS — نعيدها الآن بصلاحية المدير
+      resetSeedGate();
     },
     [secure],
   );

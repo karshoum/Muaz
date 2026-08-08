@@ -8,7 +8,7 @@ import { ConfirmDialog } from '@/components/ui/Modal';
 import { EmptyState, PageLoader } from '@/components/ui/Spinner';
 import { useToast } from '@/components/ui/Toast';
 import { ProductImage } from '@/components/product/ProductImage';
-import { deleteDemoProducts, deleteProduct, updateProduct } from '@/lib/data';
+import { deleteDemoProducts, deleteProduct, seedIfEmpty, updateProduct } from '@/lib/data';
 import { useProducts } from '@/lib/hooks/useProducts';
 import { useSettings } from '@/lib/settings/SettingsProvider';
 import { CATEGORIES } from '@/lib/constants';
@@ -25,6 +25,25 @@ export default function AdminProductsPage() {
   const [target, setTarget] = useState<Product | null>(null);
   const [demoConfirm, setDemoConfirm] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [importing, setImporting] = useState(false);
+
+  /**
+   * استيراد يدوي لكتالوج المعرض.
+   * الزرع التلقائي يجري عند فتح الصفحة وقد يسبق تسجيل الدخول فترفضه
+   * قواعد RLS، لذا نوفّر مساراً صريحاً بيد المدير لا يعتمد على التوقيت.
+   */
+  const importCatalog = async () => {
+    setImporting(true);
+    try {
+      await seedIfEmpty();
+      await reload();
+      toast('تم استيراد كتالوج المعرض بصوره.');
+    } catch (err) {
+      toast(err instanceof Error ? err.message : 'تعذّر استيراد الكتالوج.', 'error');
+    } finally {
+      setImporting(false);
+    }
+  };
 
   const demoCount = products.filter((p) => p.isDemo).length;
 
@@ -128,16 +147,30 @@ export default function AdminProductsPage() {
           title={products.length === 0 ? 'لا توجد منتجات' : 'لا توجد نتائج'}
           message={
             products.length === 0
-              ? 'ابدأ بإضافة أول قطعة أثاث، وصوّرها من الكاميرا أو ارفعها من معرض جهازك.'
+              ? 'استورد كتالوج المعرض الجاهز (١٤ قطعة بصورها)، أو ابدأ بإضافة قطعك بنفسك.'
               : 'جرّب تغيير كلمة البحث أو القسم.'
           }
           action={
-            <Link
-              href="/admin/products/new"
-              className="rounded-lg bg-gold px-5 py-2.5 text-sm font-bold text-navy"
-            >
-              إضافة قطعة جديدة
-            </Link>
+            products.length === 0 ? (
+              <div className="flex flex-col gap-2 sm:flex-row">
+                <Button onClick={() => void importCatalog()} loading={importing}>
+                  ⬇️ استيراد كتالوج المعرض (١٤ قطعة)
+                </Button>
+                <Link
+                  href="/admin/products/new"
+                  className="inline-flex h-11 items-center justify-center rounded-lg border-2 border-gold px-5 text-sm font-bold text-navy"
+                >
+                  إضافة قطعة يدوياً
+                </Link>
+              </div>
+            ) : (
+              <Link
+                href="/admin/products/new"
+                className="rounded-lg bg-gold px-5 py-2.5 text-sm font-bold text-navy"
+              >
+                إضافة قطعة جديدة
+              </Link>
+            )
           }
         />
       ) : (

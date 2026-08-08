@@ -65,4 +65,15 @@ export function ensureSeeded(): Promise<void> {
   return seedPromise;
 }
 
+/**
+ * يُلغي حفظ نتيجة الزرع ليُعاد في المرة القادمة.
+ *
+ * ضروري بعد تسجيل دخول المدير: محاولة الزرع الأولى تجري والزائر مجهول،
+ * فترفضها قواعد RLS بحق. بدون هذا الإلغاء تبقى النتيجة الفاشلة محفوظة
+ * ولا يُزرع الكتالوج أبداً ما دامت الصفحة مفتوحة.
+ */
+export function resetSeedGate(): void {
+  seedPromise = null;
+}
+
 export * from '@/lib/data/types';

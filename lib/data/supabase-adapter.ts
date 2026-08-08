@@ -203,19 +203,24 @@ export const supabaseAdapter: DataAdapter = {
   },
 
   /**
-   * الزرع في السحابة يتطلب صلاحية كتابة (مدير مسجّل الدخول).
-   * لذلك يُنفَّذ بصمت ويُتجاهل خطأ الصلاحية لزوار الموقع.
+   * الزرع في السحابة يتطلب صلاحية كتابة (مدير مسجّل الدخول)، فقواعد RLS
+   * ترفضه من الزائر المجهول بحق.
+   *
+   * يُرمى خطأ الإدراج ليصل إلى زر «استيراد الكتالوج» في لوحة التحكم،
+   * بينما يبتلعه ensureSeeded في المسار التلقائي حتى لا يتعطل الموقع.
    */
   async seedIfEmpty() {
     const supabase = client();
     const { count, error } = await supabase
       .from(SUPABASE_PRODUCTS_TABLE)
       .select('id', { count: 'exact', head: true });
-    if (error || (count ?? 0) > 0) return;
+    if (error) throw friendlyError(error);
+    if ((count ?? 0) > 0) return;
 
     const rows = buildSeedProducts().map(({ id, createdAt, updatedAt, ...rest }) =>
       inputToRow(rest),
     );
-    await supabase.from(SUPABASE_PRODUCTS_TABLE).insert(rows);
+    const { error: insertError } = await supabase.from(SUPABASE_PRODUCTS_TABLE).insert(rows);
+    if (insertError) throw friendlyError(insertError);
   },
 };
