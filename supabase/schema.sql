@@ -119,36 +119,60 @@ create policy "تعديل الإعدادات للمدير"
 
 -- ---------------------------------------------------------------------
 -- 5) مخزن صور المنتجات
+--
+--    محرر SQL في Supabase ينفّذ الملف كله في معاملة واحدة، وبعض
+--    المشاريع لا تمنح المستخدم ملكية storage.objects — فيفشل إنشاء
+--    السياسات ويُلغى معه إنشاء الجداول أعلاه بأكمله.
+--
+--    لذلك نعزل هذا القسم في كتلة تلتقط الخطأ: إن تعذّر إعداد المخزن
+--    تبقى الجداول والسياسات سليمة، والموقع يعمل بصور الكتالوج المضمّنة،
+--    ويُنشئ المدير المخزن يدوياً لاحقاً من Storage ← New bucket.
 -- ---------------------------------------------------------------------
-insert into storage.buckets (id, name, public)
-values ('product-images', 'product-images', true)
-on conflict (id) do update set public = true;
+do $do$
+begin
+  insert into storage.buckets (id, name, public)
+  values ('product-images', 'product-images', true)
+  on conflict (id) do update set public = true;
 
-drop policy if exists "عرض صور المنتجات للجميع" on storage.objects;
-create policy "عرض صور المنتجات للجميع"
-  on storage.objects for select
-  to anon, authenticated
-  using (bucket_id = 'product-images');
+  execute $p$drop policy if exists "عرض صور المنتجات للجميع" on storage.objects$p$;
+  execute $p$create policy "عرض صور المنتجات للجميع"
+             on storage.objects for select
+             to anon, authenticated
+             using (bucket_id = 'product-images')$p$;
 
-drop policy if exists "رفع صور المنتجات للمدير" on storage.objects;
-create policy "رفع صور المنتجات للمدير"
-  on storage.objects for insert
-  to authenticated
-  with check (bucket_id = 'product-images');
+  execute $p$drop policy if exists "رفع صور المنتجات للمدير" on storage.objects$p$;
+  execute $p$create policy "رفع صور المنتجات للمدير"
+             on storage.objects for insert
+             to authenticated
+             with check (bucket_id = 'product-images')$p$;
 
-drop policy if exists "تعديل صور المنتجات للمدير" on storage.objects;
-create policy "تعديل صور المنتجات للمدير"
-  on storage.objects for update
-  to authenticated
-  using (bucket_id = 'product-images');
+  execute $p$drop policy if exists "تعديل صور المنتجات للمدير" on storage.objects$p$;
+  execute $p$create policy "تعديل صور المنتجات للمدير"
+             on storage.objects for update
+             to authenticated
+             using (bucket_id = 'product-images')$p$;
 
-drop policy if exists "حذف صور المنتجات للمدير" on storage.objects;
-create policy "حذف صور المنتجات للمدير"
-  on storage.objects for delete
-  to authenticated
-  using (bucket_id = 'product-images');
+  execute $p$drop policy if exists "حذف صور المنتجات للمدير" on storage.objects$p$;
+  execute $p$create policy "حذف صور المنتجات للمدير"
+             on storage.objects for delete
+             to authenticated
+             using (bucket_id = 'product-images')$p$;
+
+  raise notice 'تم إعداد مخزن الصور product-images.';
+exception
+  when others then
+    raise notice 'تعذّر إعداد مخزن الصور تلقائياً (%). الجداول أُنشئت بنجاح — أنشئ المخزن يدوياً من Storage ← New bucket باسم product-images واجعله Public.', sqlerrm;
+end;
+$do$;
+
+-- ---------------------------------------------------------------------
+-- 6) تأكيد النجاح — يظهر كصف في نتيجة الاستعلام
+-- ---------------------------------------------------------------------
+select
+  '✅ تم إنشاء قاعدة البيانات بنجاح' as "الحالة",
+  'ارجع إلى /admin/products واضغط «استيراد كتالوج المعرض»' as "الخطوة التالية";
 
 -- =====================================================================
---  انتهى. الخطوة التالية: أنشئ حساب المدير من
+--  انتهى. إن لم تكن أنشأت حساب المدير بعد:
 --  Authentication ← Users ← Add user (مع تفعيل Auto Confirm User)
 -- =====================================================================
