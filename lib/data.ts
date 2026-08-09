@@ -43,7 +43,7 @@ export const profile = {
   phoneHref: 'tel:+249129316418',
   whatsapp: 'https://wa.me/249129316418',
   cvPath: '/cv-maaz-karshoum.pdf',
-  siteUrl: 'https://maazkarshoum.com',
+  siteUrl: 'https://maazkarshoum.vercel.app',
 } as const;
 
 /* ————————————————————————————— التنقّل ————————————————————————————— */
