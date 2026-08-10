@@ -42,7 +42,6 @@ export const profile = {
   phoneLocal: '0129316418',
   phoneHref: 'tel:+249129316418',
   whatsapp: 'https://wa.me/249129316418',
-  cvPath: '/cv-maaz-karshoum.pdf',
   siteUrl: 'https://maazkarshoum.vercel.app',
 } as const;
 

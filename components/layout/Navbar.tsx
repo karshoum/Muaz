@@ -1,6 +1,6 @@
 'use client';
 
-import { Download, Menu, X } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { navLinks, profile } from '@/lib/data';
@@ -150,15 +150,6 @@ export function Navbar() {
 
         {/* الإجراءات */}
         <div className="flex items-center gap-2">
-          <a
-            href={profile.cvPath}
-            download
-            className="hidden items-center gap-2 rounded-xl grad-cta px-4 py-2.5 text-sm font-semibold text-white shadow-soft transition-transform duration-200 hover:-translate-y-0.5 sm:inline-flex"
-          >
-            <Download className="h-4 w-4" aria-hidden="true" />
-            السيرة الذاتية
-          </a>
-
           <button
             ref={triggerRef}
             type="button"
@@ -230,16 +221,6 @@ export function Navbar() {
               {link.label}
             </a>
           ))}
-
-          <a
-            href={profile.cvPath}
-            download
-            onClick={close}
-            className="mt-3 inline-flex items-center justify-center gap-2 rounded-xl grad-cta px-4 py-3 text-sm font-semibold text-white"
-          >
-            <Download className="h-4 w-4" aria-hidden="true" />
-            تحميل السيرة الذاتية
-          </a>
         </div>
       </div>
     </header>
