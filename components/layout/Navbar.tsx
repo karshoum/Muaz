@@ -3,7 +3,6 @@
 import { Download, Menu, X } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { ThemeToggle } from './ThemeToggle';
 import { navLinks, profile } from '@/lib/data';
 import { cn } from '@/lib/utils';
 
@@ -151,8 +150,6 @@ export function Navbar() {
 
         {/* الإجراءات */}
         <div className="flex items-center gap-2">
-          <ThemeToggle />
-
           <a
             href={profile.cvPath}
             download

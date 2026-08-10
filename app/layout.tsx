@@ -56,30 +56,10 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#f8fafc' },
-    { media: '(prefers-color-scheme: dark)', color: '#070a14' },
-  ],
+  themeColor: '#f8fafc',
   width: 'device-width',
   initialScale: 1,
 };
-
-/**
- * يُنفَّذ قبل الطلاء الأول فيمنع وميض الثيم (FOUC) واختلاف الترطيب.
- * مكتوب بلا اعتماد على أي حزمة لأنه يعمل قبل تحميل React.
- */
-const themeScript = `
-(function () {
-  try {
-    var stored = localStorage.getItem('theme');
-    var isDark = stored
-      ? stored === 'dark'
-      : window.matchMedia('(prefers-color-scheme: dark)').matches;
-    document.documentElement.classList.toggle('dark', isDark);
-    document.documentElement.style.colorScheme = isDark ? 'dark' : 'light';
-  } catch (e) {}
-})();
-`;
 
 const personJsonLd = {
   '@context': 'https://schema.org',
@@ -119,9 +99,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ar" dir="rtl" className={arabic.variable} suppressHydrationWarning>
+    <html lang="ar" dir="rtl" className={arabic.variable}>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}

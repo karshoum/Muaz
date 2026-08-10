@@ -226,7 +226,7 @@ export function ContactForm() {
       {/* حالات الاستجابة — تُعلَن لقارئات الشاشة */}
       <div aria-live="polite" role="status">
         {status === 'success' ? (
-          <p className="flex items-start gap-2 rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-4 text-sm text-emerald-700 dark:text-emerald-400">
+          <p className="flex items-start gap-2 rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-4 text-sm text-emerald-700">
             <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
             وصلت رسالتك. سأردّ عليك على البريد الذي كتبته بإذن الله.
           </p>
@@ -241,7 +241,7 @@ export function ContactForm() {
         ) : null}
 
         {status === 'error' ? (
-          <p className="flex items-start gap-2 rounded-xl border border-red-500/30 bg-red-500/10 p-4 text-sm text-red-600 dark:text-red-400">
+          <p className="flex items-start gap-2 rounded-xl border border-red-500/30 bg-red-500/10 p-4 text-sm text-red-600">
             <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
             {serverError} يمكنك مراسلتي مباشرة على {profile.email}.
           </p>

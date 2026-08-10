@@ -120,7 +120,7 @@ export function Contact() {
                     <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75 animate-pulse-ring" />
                     <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500" />
                   </span>
-                  <p className="text-sm text-emerald-700 dark:text-emerald-400">
+                  <p className="text-sm text-emerald-700">
                     متاح حاليًا لمشاريع واستشارات جديدة
                   </p>
                 </div>

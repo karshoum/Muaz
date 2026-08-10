@@ -56,14 +56,14 @@ export function Timeline() {
                             className={cn(
                               'rounded-lg px-2.5 py-1 text-xs font-semibold',
                               isEducation
-                                ? 'bg-amber-500/10 text-amber-700 dark:text-amber-400'
+                                ? 'bg-amber-500/10 text-amber-700'
                                 : 'bg-accent/10 text-accent',
                             )}
                           >
                             {entry.period}
                           </span>
                           {entry.current ? (
-                            <span className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-500/10 px-2.5 py-1 text-xs font-semibold text-emerald-700 dark:text-emerald-400">
+                            <span className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-500/10 px-2.5 py-1 text-xs font-semibold text-emerald-700">
                               <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
                               الوظيفة الحالية
                             </span>
