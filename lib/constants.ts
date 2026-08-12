@@ -93,9 +93,9 @@ export const MAIN_NAV = [
  * جميعها قابلة للتعديل من: لوحة التحكم ← الإعدادات، دون لمس الكود.
  */
 export const DEFAULT_SETTINGS: SiteSettings = {
-  whatsappNumber: '+249912345678',
+  whatsappNumber: '+249129946237',
   whatsappNumberAlt: '',
-  phone: '+249912345678',
+  phone: '+249129946237',
   email: 'info@alraqi-furniture.com',
   address: 'الخرطوم — السودان',
   announcement: 'توصيل داخل الخرطوم • اطلب الآن مباشرة عبر واتساب',
