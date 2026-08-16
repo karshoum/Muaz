@@ -6,7 +6,13 @@ export const SITE_FULL_NAME = `${SITE_NAME} ${SITE_TAGLINE}`;
 export const SITE_DESCRIPTION =
   'معرض الراقي الهندسي للأثاث والديكور في السودان — غرف نوم، غرف أطفال، دواليب، أثاث غرف المعيشة، طاولات طعام، وديكور ومستلزمات المنزل. اطلب مباشرة عبر واتساب.';
 
-/** أقسام المعرض كما تظهر في شبكة الأقسام بالصفحة الرئيسية */
+/**
+ * أقسام المعرض كما تظهر في شبكة الأقسام بالصفحة الرئيسية.
+ *
+ * حقل `image` هو صورة احتياطية فقط: شبكة الأقسام تعرض صورة حقيقية من
+ * أول قطعة في القسم متى وُجدت، فتتحدّث الواجهة تلقائياً كلما أضاف المدير
+ * قطعة جديدة. الرسم التوضيحي لا يظهر إلا في قسم لا يحوي أي قطعة بعد.
+ */
 export const CATEGORIES: Category[] = [
   {
     slug: 'bedrooms',
@@ -30,7 +36,7 @@ export const CATEGORIES: Category[] = [
     slug: 'living',
     name: 'أثاث غرف المعيشة',
     description: 'تصفح أحدث موديلات غرف المعيشة',
-    image: '/images/categories/living.svg',
+    image: '/images/products/sectional-cream.jpg',
   },
   {
     slug: 'dining',
@@ -42,7 +48,7 @@ export const CATEGORIES: Category[] = [
     slug: 'decor',
     name: 'ديكور ومستلزمات المنزل',
     description: 'نصفح أحدث ديكورات ومستلزمات المنزل',
-    image: '/images/categories/decor.svg',
+    image: '/images/products/cabinet-white-gold.jpg',
   },
 ];
 
@@ -54,26 +60,29 @@ export function categoryName(slug: string): string {
   return CATEGORY_MAP[slug as Category['slug']]?.name ?? 'غير مصنّف';
 }
 
-/** شرائح البانر الرئيسي */
+/**
+ * شرائح البانر الرئيسي — صور حقيقية من قطع المعرض.
+ * الرسوم التوضيحية القديمة في /images/hero محفوظة كاحتياطي فقط.
+ */
 export const HERO_SLIDES = [
   {
     title: 'فخامة الأثاث العصري لمنزلك',
     subtitle: 'تشكيلة مختارة بعناية من أرقى قطع الأثاث والديكور',
-    image: '/images/hero/hero-1.svg',
+    image: '/images/products/sofa-royal-green.jpg',
     cta: 'تسوق الآن',
     href: '/products',
   },
   {
-    title: 'غرف نوم بتصاميم هندسية مميزة',
+    title: 'أطقم مجالس بتصاميم هندسية مميزة',
     subtitle: 'راحة تدوم وأناقة لا تُنسى',
-    image: '/images/hero/hero-2.svg',
-    cta: 'تصفح غرف النوم',
-    href: '/products?category=bedrooms',
+    image: '/images/products/sectional-cream.jpg',
+    cta: 'تصفح غرف المعيشة',
+    href: '/products?category=living',
   },
   {
     title: 'ديكور يليق بذوقك الرفيع',
     subtitle: 'لمسات أخيرة تصنع الفرق في منزلك',
-    image: '/images/hero/hero-3.svg',
+    image: '/images/products/cabinet-white-gold.jpg',
     cta: 'اكتشف الديكورات',
     href: '/products?category=decor',
   },
